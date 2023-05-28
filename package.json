@@ -18,6 +18,6 @@
   "homepage": "https://github.com/sicinfo/authjs#readme",
   "dependencies": {
     "http-errors": "github:jshttp/http-errors#semver:^v2",
-    "jsonwebtoken": "github:auth0/node-jsonwebtoken#server:^v9"
+    "jsonwebtoken": "github:auth0/node-jsonwebtoken#semver:^v9"
   }
 }
