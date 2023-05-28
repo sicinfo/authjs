@@ -8,12 +8,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sicinfo/authjs-util.git"
+    "url": "git+https://github.com/sicinfo/authjs.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/sicinfo/authjs-util/issues"
+    "url": "https://github.com/sicinfo/authjs/issues"
   },
-  "homepage": "https://github.com/sicinfo/authjs-util#readme"
+  "homepage": "https://github.com/sicinfo/authjs#readme",
+  "dependencies": {
+    "http-errors": "github:jshttp/http-errors#semver:^v2",
+    "jsonwebtoken": "github:auth0/node-jsonwebtoken#server:^v9"
+  }
 }
