@@ -1,6 +1,6 @@
 {
   "name": "sicinfo-authjs",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "",
   "main": "auth.js",
   "scripts": {
@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/sicinfo/authjs#readme",
   "dependencies": {
-    "http-errors": "github:jshttp/http-errors#semver:^v2.0",
-    "jsonwebtoken": "github:auth0/node-jsonwebtoken#semver:^v9.0"
+    "http-errors": "github:jshttp/http-errors#semver:v2",
+    "jsonwebtoken": "github:auth0/node-jsonwebtoken#semver:v9"
   }
 }
