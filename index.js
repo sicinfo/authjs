@@ -1,8 +1,32 @@
 /**
- * @module authjs
  * @author moreira
+ */ /**
+ * @typedef { import('jsonwebtoken').JwtPayload & SignArgsOptions } Payload
+ * @typedef { import('jsonwebtoken').SignOptions} SignOptions
+ * @typedef {{Bearer?:string,secret?:string}} SignThis
+ */ /**
+ * @template [T=string]
+ * @typedef {T} SignResult
+ */ /**
+ * @typedef SignArgsOptions
+ * @property {number=} stp
+ * @property {number=} cnt
+ * @property {string=} name
+ * @property {string=} api 
+ */ /**
+ * @template [T=string]
+ * @typedef {(a?:T,b?:boolean)=>Promise<Payload|undefined>} validate
+ */ /**
+ * @template [T=string]
+ * @typedef {T} Authorization
+ */ /**
+ * @typedef {(a:Payload,b?:SignOptions)=>SignResult} _sign
+ * @typedef {(a:Payload,b:SignOptions)=>SignResult} create
+ * @typedef {(a:Payload)=>SignResult} renew
+ * @typedef {(a:string)=>string} btoa
+ * @typedef {(a:string)=>string} atob
  */
-'use strict';
+ 'use strict';
 
 const jwt = require('jsonwebtoken');
 const { Unauthorized } = require('http-errors');
@@ -15,21 +39,19 @@ const expiresIn = 60 * 60; // 1 hora
 const UTF8 = 'utf8';
 const BASE64 = 'base64';
 
-/**
- * @arg {Payload} payload
- * @arg {SignOptions} options
- * @this {SignThis}
+/** 
+ * @type {_sign} 
+ * @this {SignThis} 
  */
 const _sign = function (payload, options = {}) {
   return `${this.Bearer || Bearer} ${jwt.sign(payload, this.secret || JwtSecret, options)}`
 }
 
-const Auth = class {
+/** @module */
+const Authjs = module.exports = class {
 
   /**
-   * @param {AuthorizationType=} authorization
-   * @param {boolean=} required
-   * @return {Promise<Payload|undefined>}
+   * @type {validate}
    * @this {SignThis}
    */
   static validate(authorization, required) {
@@ -48,10 +70,9 @@ const Auth = class {
   }
 
   /**
- * @param {Payload} payload
- * @param {SignOptions} options
- * @this {SignThis}
- */
+   * @type {create}
+   * @this {SignThis}
+   */
   static create(payload = {}, options = {}) {
     if (undefined === options.expiresIn) options.expiresIn = expiresIn;
     if (undefined === payload.stp) payload.stp = 1 * /** @type { number } */ (options.expiresIn) || 0;
@@ -60,7 +81,7 @@ const Auth = class {
   }
 
   /** 
-   * @param {Payload} payload
+   * @type {renew}
    * @this {SignThis}
    */
   static renew(payload = {}) {
@@ -69,11 +90,13 @@ const Auth = class {
     return _sign.call(this, payload);
   }
 
-  static btoa(/** @type {string} */ arg) {
+  /** @type {btoa} */
+  static btoa(arg) {
     return Buffer.from(arg, UTF8).toString(BASE64)
   }
   
-  static atob(/** @type {string} */ arg) {
+  /** @type {atob} */
+  static atob(arg) {
     return Buffer.from(arg, BASE64).toString(UTF8)
   }
 
@@ -83,7 +106,6 @@ const Auth = class {
   /** @this {SignThis} */
   static get Bearer() { return this.Bearer || Bearer }
 
+  /** @type{Authorization} */
   static get Authorization() { return Authorization }
 }
-
-module.exports = Auth
