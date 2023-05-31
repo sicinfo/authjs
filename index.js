@@ -2,7 +2,6 @@
  * @author moreira
  */ /**
  * @typedef {jwt.JwtPayload & SignArgsOptions} Payload
- * @typedef {jwt.VerifyCallback<Payload|string>} VerifyCallback<Payload
  * @typedef {jwt.SignOptions} SignOptions
  * @typedef {{Bearer?:string,secret?:string}} SignThis
  */ /**
@@ -16,14 +15,13 @@
  * @property {string=} api 
  */ /**
  * @template [T=string]
- * typedef {jwt.SigningKeyCallback} validate
- * @typedef {(a?:T,b?:boolean)=>Promise<Payload|undefined>} validate
- */ /**
- * @template [T=string]
  * @typedef {T} Authorization
  */ /**
+ * @typedef {jwt.VerifyCallback<string|Payload>} VerifyCallback
+ * @typedef {(a?:Authorization,b?:boolean)=>Promise<Payload|undefined>} validate
+ */ /**
  * @typedef {(a:Payload,b?:SignOptions)=>SignResult} _sign
- * @typedef {(a:Payload,b:SignOptions)=>SignResult} create
+ * @typedef {(a?:Payload,b?:SignOptions)=>SignResult} create
  * @typedef {(a:Payload)=>SignResult} renew
  * @typedef {(a:string)=>string} btoa
  * @typedef {(a:string)=>string} atob
@@ -68,7 +66,8 @@ const Authjs = module.exports = class {
           token, 
           this.secret || JwtSecret, 
           {}, 
-          /** @type {VerifyCallback} */ (err, payload) => {
+          /** @type {VerifyCallback} */ 
+          (err, payload) => {
             if (err) reject(required ? new Unauthorized(err.message) : undefined) 
             else resolve('string' === typeof payload ? { payload } : payload)
           });
