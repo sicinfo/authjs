@@ -1,8 +1,8 @@
 /**
  * @author moreira
  */ /**
- * @typedef { import('jsonwebtoken').JwtPayload & SignArgsOptions } Payload
- * @typedef { import('jsonwebtoken').SignOptions} SignOptions
+ * @typedef { jwt.JwtPayload & SignArgsOptions } Payload
+ * @typedef { jwt.SignOptions} SignOptions
  * @typedef {{Bearer?:string,secret?:string}} SignThis
  */ /**
  * @template [T=string]
@@ -62,10 +62,14 @@ const Authjs = module.exports = class {
       if (!bearer || bearer !== (this.Bearer || Bearer) || !token)
         reject(required ? new Unauthorized() : undefined)
       else
-        jwt.verify(token, this.secret || JwtSecret, {}, (err, payload) => {
-          if (err) reject(required ? new Unauthorized(err.message) : undefined) 
-          else resolve('string' === typeof payload ? { payload } : payload)
-        });
+        jwt.verify(
+          token, 
+          this.secret || JwtSecret, 
+          {}, 
+          (err, /** @type {string|Payload=} */ payload) => {
+            if (err) reject(required ? new Unauthorized(err.message) : undefined) 
+            else resolve('string' === typeof payload ? { payload } : payload)
+          });
     });
   }
 
